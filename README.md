@@ -1,1 +1,3 @@
-# Project-Templates
+# Project Templates
+
+Various project templates.
