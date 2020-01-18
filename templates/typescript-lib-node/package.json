@@ -1,0 +1,22 @@
+{
+    "name": "example",
+    "description": "An example project.",
+    "license": "MIT",
+    "main": "target/example",
+    "dependencies": {
+        "@types/mocha": "*",
+        "@types/node": "*",
+        "@typescript-eslint/eslint-plugin": "*",
+        "@typescript-eslint/parser": "*",
+        "eslint": "*",
+        "mocha": "*",
+        "typescript": "*"
+    },
+    "repository": "https://example.com/example",
+    "scripts": {
+        "compile": "tsc -p .",
+        "lint": "eslint src/**/*.ts",
+        "pretest": "npm run lint && npm run compile",
+        "test": "mocha target/tests"
+    }
+}

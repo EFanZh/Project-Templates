@@ -1,0 +1,7 @@
+{
+    "compilerOptions": {
+        "outDir": "target",
+        "rootDir": "src",
+        "strict": true
+    }
+}
