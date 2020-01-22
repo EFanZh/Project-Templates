@@ -8,3 +8,6 @@ source = example
 [paths]
 source = src
          */site-packages
+
+[report]
+fail_under = 100

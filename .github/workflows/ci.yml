@@ -1,0 +1,51 @@
+on: push
+jobs:
+    python-lib:
+        runs-on: ${{ matrix.os }}
+        steps:
+          - uses: actions/checkout@v1
+          - uses: actions/setup-python@v1
+          - run: pip install tox
+          - run: tox
+            working-directory: templates/python-lib
+        strategy:
+            matrix:
+                os:
+                  - macOS-latest
+                  - ubuntu-latest
+                  - windows-latest
+    rust-lib:
+        runs-on: ${{ matrix.os }}
+        steps:
+          - uses: actions/checkout@v1
+          - uses: actions-rs/toolchain@v1
+            with:
+                toolchain: stable
+                components: clippy, rustfmt
+          - run: cargo fmt -- --check
+            working-directory: templates/rust-lib
+          - run: cargo clippy --all-targets --all-features -- -D warnings
+            working-directory: templates/rust-lib
+          - run: cargo test
+            working-directory: templates/rust-lib
+        strategy:
+            matrix:
+                os:
+                  - macOS-latest
+                  - ubuntu-latest
+                  - windows-latest
+    typescript-lib-node:
+        runs-on: ${{ matrix.os }}
+        steps:
+          - uses: actions/checkout@v1
+          - uses: actions/setup-node@v1
+          - run: npm install
+            working-directory: templates/typescript-lib-node
+          - run: npm test
+            working-directory: templates/typescript-lib-node
+        strategy:
+            matrix:
+                os:
+                  - macOS-latest
+                  - ubuntu-latest
+                  - windows-latest
