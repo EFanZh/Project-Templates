@@ -1,9 +1,32 @@
 on: push
 jobs:
+    cpp-lib-cmake:
+        runs-on: ${{ matrix.os }}
+        steps:
+          - uses: actions/checkout@v2
+          - env:
+                CC: gcc-9
+                CXX: g++-9
+            if: runner.os == 'Linux'
+            run: cmake -B build
+            working-directory: templates/cpp-lib-cmake
+          - if: runner.os != 'Linux'
+            run: cmake -B build
+            working-directory: templates/cpp-lib-cmake
+          - run: cmake --build build
+            working-directory: templates/cpp-lib-cmake
+          - run: ctest
+            working-directory: templates/cpp-lib-cmake/build
+        strategy:
+            matrix:
+                os:
+                  - macOS-latest
+                  - ubuntu-latest
+                  - windows-latest
     python-lib:
         runs-on: ${{ matrix.os }}
         steps:
-          - uses: actions/checkout@v1
+          - uses: actions/checkout@v2
           - uses: actions/setup-python@v1
           - run: pip install tox
           - run: tox
@@ -17,7 +40,7 @@ jobs:
     rust-lib:
         runs-on: ${{ matrix.os }}
         steps:
-          - uses: actions/checkout@v1
+          - uses: actions/checkout@v2
           - uses: actions-rs/toolchain@v1
             with:
                 toolchain: stable
@@ -37,7 +60,7 @@ jobs:
     typescript-lib-node:
         runs-on: ${{ matrix.os }}
         steps:
-          - uses: actions/checkout@v1
+          - uses: actions/checkout@v2
           - uses: actions/setup-node@v1
           - run: npm install
             working-directory: templates/typescript-lib-node
