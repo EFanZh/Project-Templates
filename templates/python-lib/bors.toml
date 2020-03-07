@@ -1,0 +1,9 @@
+status = [
+    "python-lib (%)",
+    "rust-lib (%)",
+    "typescript-lib-node (%)"
+]
+
+timeout_sec = 21600
+delete_merged_branches = true
+use_squash_merge = true
