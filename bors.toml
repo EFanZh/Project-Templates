@@ -1,8 +1,16 @@
 status = [
-    "cpp-lib-cmake (%)",
-    "python-lib (%)",
-    "rust-lib (%)",
-    "typescript-lib-node (%)"
+    "cpp-lib-cmake (macOS-latest)",
+    "cpp-lib-cmake (ubuntu-latest)",
+    "cpp-lib-cmake (windows-latest)",
+    "python-lib (macOS-latest)",
+    "python-lib (ubuntu-latest)",
+    "python-lib (windows-latest)",
+    "rust-lib (macOS-latest)",
+    "rust-lib (ubuntu-latest)",
+    "rust-lib (windows-latest)",
+    "typescript-lib-node (macOS-latest)",
+    "typescript-lib-node (ubuntu-latest)",
+    "typescript-lib-node (windows-latest)"
 ]
 
 delete_merged_branches = true
