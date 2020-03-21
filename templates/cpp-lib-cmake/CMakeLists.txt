@@ -16,41 +16,44 @@ FetchContent_Declare(
     GIT_PROGRESS ON
 )
 
-FetchContent_GetProperties(googletest)
-
-if (MSVC)
+if(MSVC)
     set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 endif()
 
 FetchContent_MakeAvailable(googletest)
 
-# Global compile options.
-
-set(CMAKE_CXX_EXTENSIONS OFF)
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+# Compile options.
 
 if(MSVC)
-    set(CMAKE_INCLUDE_SYSTEM_FLAG_CXX "/external:I ")
-
-    string(REPLACE "/W3" "/W4" CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS}")
-    string(REPLACE "/W3" "/W4" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-
-    add_compile_options("/WX" "/experimental:external" "/external:W0")
-else()
-    add_compile_options("-Wall" "-Wextra" "-Wpedantic" "-Wconversion" "-Werror")
+    set(CMAKE_INCLUDE_SYSTEM_FLAG_C "/external:I")
+    set(CMAKE_INCLUDE_SYSTEM_FLAG_CXX "/external:I")
 endif()
+
+function(set_compile_options TARGET)
+    set_target_properties(${TARGET}
+                          PROPERTIES CXX_EXTENSIONS OFF
+                                     CXX_STANDARD 20
+                                     CXX_STANDARD_REQUIRED ON)
+
+    if(MSVC)
+        target_compile_options(${TARGET} PRIVATE "/Wall" "/WX" "/experimental:external" "/external:W0")
+    else()
+        target_compile_options(${TARGET} PRIVATE "-Wall" "-Wextra" "-Wpedantic" "-Wconversion" "-Werror")
+    endif()
+endfunction()
 
 # Configure library.
 
 add_library(example src/example/example.cpp)
+set_compile_options(example)
 target_include_directories(example PUBLIC include)
 
 # Configure test.
 
 enable_testing()
 
-add_executable(example_test tests/example/example_test.cpp)
-target_link_libraries(example_test PRIVATE example gtest_main)
+add_executable(example_tests tests/example/example_tests.cpp)
+set_compile_options(example_tests)
+target_link_libraries(example_tests PRIVATE example gtest_main)
 
-gtest_discover_tests(example_test)
+gtest_discover_tests(example_tests)

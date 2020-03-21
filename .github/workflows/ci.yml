@@ -12,14 +12,16 @@ jobs:
         runs-on: ${{ matrix.os }}
         steps:
           - uses: actions/checkout@v2
-          - env:
-                CC: gcc-9
-                CXX: g++-9
-            if: runner.os == 'Linux'
+          - if: runner.os == 'Windows'
+            uses: seanmiddleditch/gha-setup-vsdevenv@v1
+          - if: runner.os == 'Linux'
+            run: cmake -B build -DCMAKE_C_COMPILER=gcc-9 -DCMAKE_CXX_COMPILER=g++-9
+            working-directory: templates/cpp-lib-cmake
+          - if: runner.os == 'macOS'
             run: cmake -B build
             working-directory: templates/cpp-lib-cmake
-          - if: runner.os != 'Linux'
-            run: cmake -B build
+          - if: runner.os == 'Windows'
+            run: cmake -B build -DCMAKE_C_COMPILER=cl -DCMAKE_CXX_COMPILER=cl -G Ninja
             working-directory: templates/cpp-lib-cmake
           - run: cmake --build build
             working-directory: templates/cpp-lib-cmake
